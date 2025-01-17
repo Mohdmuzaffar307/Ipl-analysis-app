@@ -15,8 +15,10 @@ page_bg_style = """
 
     /* Optionally change the sidebar background color */
     [data-testid="stSidebar"] {
-        background-color: #293940; /* Replace with your desired color */
+        background-color: #293940; /* Replace with your desired color */      
     }
+    
+
 </style>
 """
 # Inject CSS
@@ -105,7 +107,7 @@ else:
 
 ##Average Calculation
 ipldiss=ipl.query('batter==@batsman_name').groupby('match_id')['player_dismissed'].count().reset_index()
-avg=round(ipl.query('batter==@batsman_name').groupby('batter')['batsman_runs'].sum().values[0]/ipldiss['player_dismissed'].sum(),2)
+avg=round(ipl.query('batter==@batsman_name').groupby('batter')['batsman_runs'].sum().values[0]/len(ipl.query('player_dismissed==@batsman_name')),2)
 
 ## Max Score
 max_score=batsman_rec[batsman_rec['batter']==batsman_name]["Batsman_runs"].max()
@@ -297,6 +299,5 @@ if player_vs_team:
     st.subheader("Sixes:  {} :".format(batsman_sixes_against))
     st.subheader("Fours: {}".format(batsman_fours_against))
     st.table(batsman_rec.query("batter==@batsman_name and bowling_team== @teams"))
-
     st.balloons()
 
