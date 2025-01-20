@@ -301,3 +301,26 @@ if player_vs_team:
     st.table(batsman_rec.query("batter==@batsman_name and bowling_team== @teams"))
     st.balloons()
 
+
+team1_name=sorted(pd.concat([bt, bat], ignore_index=True,axis=1)[0].unique())
+team2_name=sorted(pd.concat([bt, bat], ignore_index=True,axis=1)[0].unique())
+team1_name_selected=st.sidebar.selectbox("Choose team 1",team1_name)
+team2_name_selected=st.sidebar.selectbox("Choose team 2",team2_name)
+total_match=len(ipl.query("batting_team==@team1_name_selected and bowling_team== @team2_name_selected ").groupby(['match_id','batting_team','bowling_team','winner']).size())
+team1_won=len(ipl.query("batting_team==@team1_name_selected and bowling_team==@team2_name_selected and winner==@team1_name_selected ").groupby(['match_id','batting_team','bowling_team','winner']).size())
+team2_won=len(ipl.query("batting_team==@team1_name_selected and bowling_team==@team2_name_selected and winner==@team2_name_selected ").groupby(['match_id','batting_team','bowling_team','winner']).size())
+
+team1won_during_bat=len(ipl.query("batting_team==@team1_name_selected and bowling_team==@team2_name_selected and winner==@team1_name_selected and toss_decision=='bat' ").groupby(['match_id','batting_team','bowling_team','winner','toss_decision']).size())
+team2won_during_bat=len(ipl.query("batting_team==@team1_name_selected and bowling_team==@team2_name_selected and winner==@team2_name_selected and toss_decision=='bat' ").groupby(['match_id','batting_team','bowling_team','winner','toss_decision']).size())
+
+team1_field=len(ipl.query("batting_team==@team1_name_selected and bowling_team==@team2_name_selected and winner==@team1_name_selected and toss_decision=='field' ").groupby(['match_id','batting_team','bowling_team','winner','toss_decision']).size())
+team2_field=len(ipl.query("batting_team==@team1_name_selected and bowling_team==@team2_name_selected and winner==@team2_name_selected and toss_decision=='field' ").groupby(['match_id','batting_team','bowling_team','winner','toss_decision']).size())
+btn4=st.sidebar.button('Campare')
+if btn4:
+    st.subheader(f'Toatal Matches B/W {team1_name_selected} and {team2_name_selected} is {total_match}')
+    st.subheader(f'{team1_name_selected} won {team1_won} and {team2_name_selected} won {team2_won}')
+    st.subheader(f'{team1_name_selected} won  during bat first {team1won_during_bat} time  {team2_name_selected} won {team2won_during_bat} times')
+    st.subheader( f'{team1_name_selected} won  during field first {team1_field} time  {team2_name_selected} won {team2_field} times')
+
+
+
