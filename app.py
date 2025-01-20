@@ -15,7 +15,7 @@ page_bg_style = """
 
     /* Optionally change the sidebar background color */
     [data-testid="stSidebar"] {
-        background-color: #293940; /* Replace with your desired color */      
+        background-color: #203940; /* Replace with your desired color */      
     }
     
 
@@ -51,7 +51,9 @@ st.sidebar.markdown("""
 #Importing Dataset
 ipl=pd.read_csv('ipl_claened.csv')
 ### MAIN PAGE
-st.header("IPL DATA ANALYSIS FROM 2007 TO 2024")
+st.markdown("""
+    <h1 style="color: #600606; text-align: center;font-size: 60px;"> Welcome to IPL League</h1>
+""",unsafe_allow_html=True)
 
 
 ### INDIVIDUAL BATTERS
@@ -248,12 +250,17 @@ bt=ipl[['bowling_team']]
 bat=ipl[['batting_team']]
 team_name=sorted(pd.concat([bt, bat], ignore_index=True,axis=1)[0].unique())
 
+
 #Fetch team Details
 
 teams=st.sidebar.selectbox("Teams Performance",team_name)
 btn3=st.sidebar.button('Team Statics')
 
 
+#total Matches
+team_total_match=len(ipl.query('(bowling_team == @teams and batting_team != @teams) or (batting_team == @teams and bowling_team != @teams ) ').groupby('match_id').size().reset_index())
+#total win
+team_total_match_won=len(ipl.query('winner==@teams ').groupby('match_id').size().reset_index())
 ## calc
 total_trophy=len(ipl.query('match_type=="Final" and winner== @teams').groupby(['season','winner']).size())
 
@@ -273,6 +280,8 @@ top_10_bowler=bowler_wicket_rec.query('bowling_team==@teams').head(10)
 
 if btn3:
     st.header(teams)
+    st.subheader(f'{teams} played total {team_total_match} Matches and Won {team_total_match_won} Matches')
+    st.subheader(f'{teams} winning percentage is {round((team_total_match_won/team_total_match)*100)}%')
     if total_trophy >=1:
         st.subheader("Total Trophy 😎 : {}".format(total_trophy))
     else:
