@@ -263,7 +263,14 @@ ipl['runner'] = np.where(ipl['winner'] == ipl['batting_team'], ipl['bowling_team
 
 final_match=ipl.query('match_type=="Final" and winner== @teams').groupby(['season','winner','runner','player_of_match']).size().reset_index().drop(columns=0,axis=1)
 
+#top batters
 top_10_batter=ipl.query('batting_team== @teams or bowling_team ==@teams').groupby(['batter'])['batsman_runs'].sum().reset_index().sort_values('batsman_runs',ascending=False).head(10)
+
+#top bowlers
+bowler_wickets=ipl.query("dismissal_kind not in ['run out','retired hurt','retired out']")
+bowler_wicket_rec=bowler_wickets.groupby(['bowler','bowling_team'])['player_dismissed'].count().reset_index().sort_values('player_dismissed',ascending=False)
+top_10_bowler=bowler_wicket_rec.query('bowling_team==@teams').head(10)
+
 if btn3:
     st.header(teams)
     if total_trophy >=1:
@@ -271,7 +278,7 @@ if btn3:
     else:
         st.subheader("Total Trophy 🥹😭 : {}".format(total_trophy))
     st.markdown("""
-             <h1 style="color: green; text-align: center;"> Final Records </h1>
+             <h1 style="color: #084704; text-align: center;"> Final Records </h1>
              """, unsafe_allow_html=True)
     st.table(final_match)
 
@@ -279,6 +286,10 @@ if btn3:
              <h1 style="color: #084704; text-align: center;"> Top Batters </h1>
              """, unsafe_allow_html=True)
     st.table(top_10_batter)
+    st.markdown("""
+             <h1 style="color: #084704; text-align: center;"> Top Bowlers </h1>
+             """, unsafe_allow_html=True)
+    st.table(top_10_bowler)
     st.balloons()
 
 
