@@ -55,7 +55,8 @@ st.markdown("""
     <h1 style="color: #600606; text-align: center;font-size: 60px;"> Welcome to IPL League</h1>
 """,unsafe_allow_html=True)
 
-
+image = Image.open("teams.jpg")
+st.image(image,  use_container_width=True)
 ### INDIVIDUAL BATTERS
 
 batter=sorted(list(ipl['batter'].unique()))
