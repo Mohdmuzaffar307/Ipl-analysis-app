@@ -6,5 +6,6 @@ matplotlib
 Scikit-learn
 plotly
 plotly.express
-PIL
+
+
 
