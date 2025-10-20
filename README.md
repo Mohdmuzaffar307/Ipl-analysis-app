@@ -1,5 +1,8 @@
-# IPL Data Analysis App
+### **IPL Data Analysis App**
 This is an interactive IPL Data Analysis application built using Python and Streamlit. The app allows you to analyze various aspects of IPL matches, including player performance, team statistics, and more. You can filter and visualize data for specific players, teams, and match types.
+
+## **Tech Stack**
+Python | Numpy | Pandas | Plotly | Streamlit
 
 ## Features
 Player Analysis: Explore batting and bowling statistics of players in the IPL.
